@@ -1,4 +1,5 @@
 /** #7 #chlob #new: the new yummy channel */
+console.log("Channels.js is alive");
 
 var yummy = {
     name: "#Yummy",

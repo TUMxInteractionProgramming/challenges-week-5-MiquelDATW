@@ -31,8 +31,6 @@ button, strong {
     position: absolute;
     height: 100%;
     width: 40%;
-
-    background-color: #3F51B5; /* temporary background color to see the effect, is completely hidden now */
 }
 
 #chat {

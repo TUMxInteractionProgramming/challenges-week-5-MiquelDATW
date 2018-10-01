@@ -1,5 +1,5 @@
 /* start the external action and say hello */
-console.log("App is alive");
+console.log("Script.js is alive");
 
 
 /** #7 Create global variable */
