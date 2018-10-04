@@ -21,8 +21,33 @@ body {
     background-color: #F5F5F5;
 }
 
-button, strong {
+strong {
     text-transform: uppercase;
+}
+
+button {
+    height: 30px;
+    min-width: 25px;
+    font-size: 15px;
+    border-radius: 2px;
+
+    padding: 0 16px;
+    margin-left: 8px;
+    background-color: white;
+    border: none;
+    /*color: white;*/ /* I've removed because the background is also white. Mistake? */
+    color: black;
+    text-transform: uppercase;
+}
+
+.primary-button{
+    background-color: #3F51B5;
+    color: white;
+}
+
+.accent-button{
+    background-color: #CDDC39;
+    color: black;
 }
 
 /* LAYOUT */
@@ -158,13 +183,15 @@ li.selected {
     display: flex;
 }
 
+
 #tab-bar button, #chat-bar button {
-    background-color: white;
+    /*background-color: white;
     border: none;
-    font-size: 13px;
+    font-size: 13px;*/
     width: 33%;
     height: 72px;
     padding: 16px;
+    margin: 0;
 
     /* flexify the buttons by growing them equally */
     flex-grow: 1;
@@ -184,12 +211,13 @@ li.selected {
 
 /* CHAT BAR */
 
+
 #chat-bar button {
     /* override button styles. We set the chat bar to appear like a tab-bar above. This overrides the tab bar's button scaling */
     width: auto;
     flex-grow: 0;
 
-    /* #7 #icns #smile adjust fa size */
+    /*#7 #icns #smile adjust fa size */
     font-size: 24px;
 }
 
@@ -266,20 +294,52 @@ li.selected {
 .message p {
     background-color: white;
     padding: 16px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }
 
-.message button {
-    /* +5 min. button*/
-    background-color: #CDDC39;
-    color: black;
-    text-transform: uppercase;
 
-    /* right/bottom alignment of button */
+.message button {
+    /* +5 min. button */
+    /*background-color: #CDDC39;
+    color: black;
+    text-transform: uppercase;*/
+
+    /*right/bottom alignment of button */
     position: absolute;
     right: 8px;
     bottom: 8px;
 }
 
 .message.own {
-    margin-left: 17.5%;
+    margin-left: calc(20% - 20px);
+}
+
+/**
+    Shadow values for Material Design elevations
+
+    Originally by:
+        Scott Roa
+        https://stackoverflow.com/users/6768887/scott-roa
+*/
+
+.shadow--2dp {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
+
+.shadow--24dp {
+    box-shadow: 0 9px 46px 8px rgba(0, 0, 0, 0.14), 0 11px 15px -7px rgba(0, 0, 0, 0.12), 0 24px 38px 3px rgba(0, 0, 0, 0.2);
+}
+
+
+.dot {
+    height: 50px;
+    margin: auto;
+    text-align: center;
+    width: 50px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 100px;
+    right: 10px;
+    padding: 0;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 }

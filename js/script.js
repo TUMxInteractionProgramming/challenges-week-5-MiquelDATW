@@ -149,12 +149,32 @@ function listChannels() {
     // #8 channel onload
     //$('#channels ul').append("<li>New Channel</li>")
 
+    var numberOfChannels = 5;
+
     // #8 five new channels
     $('#channels ul').append(createChannelElement(yummy));
     $('#channels ul').append(createChannelElement(sevencontinents));
     $('#channels ul').append(createChannelElement(killerapp));
     $('#channels ul').append(createChannelElement(firstpersononmars));
     $('#channels ul').append(createChannelElement(octoberfest));
+
+
+    /* Selecting one random channel when loading */
+    var r = Math.floor((Math.random() * numberOfChannels) + 1);
+
+    if (r==1){
+        switchChannel(yummy);
+    }else if (r==2){
+        switchChannel(sevencontinents);
+    }else if (r==3){
+        switchChannel(killerapp);
+    }else if (r==4){
+        switchChannel(firstpersononmars);
+    }else if (r==5){
+        switchChannel(octoberfest);
+    }
+
+    
 }
 
 /**
@@ -173,8 +193,12 @@ function createChannelElement(channelObject) {
      </li>
      */
 
+    /* Fixing faulty code */
+    var channelName = channelObject.name.slice(1,channelObject.name.length).toLowerCase();
+    var channel = $('<li onclick="switchChannel('+channelName+')">').text(channelObject.name);
+
     // create a channel
-    var channel = $('<li>').text(channelObject.name);
+    //var channel = $('<li>').text(channelObject.name);
 
     // create and append channel meta
     var meta = $('<span>').addClass('channel-meta').appendTo(channel);
