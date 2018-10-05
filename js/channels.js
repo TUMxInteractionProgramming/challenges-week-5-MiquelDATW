@@ -1,49 +1,23 @@
-/** #7 #chlob #new: the new yummy channel */
 console.log("Channels.js is alive");
 
-var yummy = {
-    name: "#Yummy",
-    createdOn: new Date(2016, 03, 01), /* month 0 is jan. */
-    createdBy: "minus.plus.yummy",
-    starred: false,
-    expiresIn: 100,
-    messageCount: 999
-};
+/** Constructor for the channels */
+function Channel(n,d,c,s,e,m){
+    this.name = n;
+    this.createdOn = d;
+    this.createdBy = c;
+    this.starred = s;
+    this.expiresIn = e;
+    this.messageCount = m;
+    this.messages = [];
+}
+
+/** #7 #chlob #new: the new yummy channel */
+var yummy = new Channel('#Yummy',new Date(2016,3,1),'minus.plus.yummy',false,100,999);
 
 /** #7 #chlob #fve: the other channels */
+var sevenContinents = new Channel('#SevenContinents',new Date(2016,3,2),'cheeses.yard.applies',true,60,5);
+var killerApp = new Channel('#KillerApp',new Date(2016,8,30),'lodge.bits.fake',false,1,10351);
+var firstPersonOnMars = new Channel('#FirstPersonOnMars',new Date(2016,8,28),'snipped.atom.grid',true,3003,2424);
+var octoberFest = new Channel('#OctoberFest',new Date(2016,8,25),'vocally.clearly.crawled',false,60,321);
 
-var sevencontinents = {
-    name: "#SevenContinents",
-    createdOn: new Date(2016, 03, 02), /* month 0 is jan. */
-    createdBy: "cheeses.yard.applies",
-    starred: true,
-    expiresIn: 60,
-    messageCount: 5
-};
-
-var killerapp = {
-    name: "#KillerApp",
-    createdOn: new Date(2016, 08, 30), /* month 0 is jan. */
-    createdBy: "lodge.bits.fake",
-    starred: false,
-    expiresIn: 1,
-    messageCount: 10351
-};
-
-var firstpersononmars = {
-    name: "#FirstPersonOnMars",
-    createdOn: new Date(2016, 08, 28), /* month 0 is jan. */
-    createdBy: "snipped.atom.grid",
-    starred: true,
-    expiresIn: 30003,
-    messageCount: 2424
-};
-
-var octoberfest = {
-    name: "#Octoberfest",
-    createdOn: new Date(2016, 08, 25), /* month 0 is jan. */
-    createdBy: "vocally.clearly.crawled",
-    starred: false,
-    expiresIn: 60,
-    messageCount: 321
-};
+var channels = [yummy, sevenContinents, killerApp, firstPersonOnMars, octoberFest];

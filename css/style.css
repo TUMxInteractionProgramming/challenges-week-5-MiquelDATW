@@ -106,7 +106,7 @@ h1 a {
     color: white;
 }
 
-h1 i {
+h1 i.fa-star{
     /* #7 #icns #str  */
     position:absolute;
     right: 16px;

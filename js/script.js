@@ -5,8 +5,8 @@ console.log("Script.js is alive");
 /** #7 Create global variable */
 var currentChannel;
 
-/** #7 We simply initialize it with the channel selected by default - sevencontinents */
-currentChannel = sevencontinents;
+/** #7 We simply initialize it with the first channel  */
+currentChannel = channels[0];
 
 /** Store my current (sender) location
  */
@@ -24,21 +24,35 @@ function switchChannel(channelObject) {
     //Log the channel switch
     console.log("Tuning in to channel", channelObject);
 
+    $('#chat h1').empty();
+
+    $('<span>').attr('id', 'channel-name').html(channelObject.name).appendTo($('#chat h1'));
+
+    $('<small>').attr('id', 'channel-location').appendTo($('#chat h1'));
+
+    $('#channel-location').html(' by <a href="http://w3w.co/'+channelObject.createdBy+'" target="_blank"><strong>'+channelObject.createdBy+'</strong></a>');
+
+    $('<i>').addClass('fa-star').addClass(channelObject.starred ? 'fas' : 'far').attr('onclick', 'star()').appendTo($('#chat h1'));
+
+
     // #7  Write the new channel to the right app bar using object property
-    document.getElementById('channel-name').innerHTML = channelObject.name;
+    /*document.getElementById('channel-name').innerHTML = channelObject.name;*/
+    //$('#channel-name').html(channelObject.name);
 
     //#7  change the channel location using object property
-    document.getElementById('channel-location').innerHTML = 'by <a href="http://w3w.co/'
+    /*document.getElementById('channel-location').innerHTML = 'by <a href="http://w3w.co/'
         + channelObject.createdBy
         + '" target="_blank"><strong>'
         + channelObject.createdBy
-        + '</strong></a>';
+        + '</strong></a>';*/
+
+    //$('#channel-location').html('by <a href="http://w3w.co/'+channelObject.createdBy+'" target="_blank"><strong>'+channelObject.createdBy+'</strong></a>');
 
     /* #7 remove either class */
-    $('#chat h1 i').removeClass('far fas');
+    //$('#chat h1 i').removeClass('far fas');
 
     /* #7 set class according to object property */
-    $('#chat h1 i').addClass(channelObject.starred ? 'fas' : 'far');
+    //$('#chat h1 i').addClass(channelObject.starred ? 'fas' : 'far');
 
 
     /* highlight the selected #channel.
@@ -82,6 +96,10 @@ function toggleEmojis() {
     $('#emojis').toggle(); // #toggle
 }
 
+function loadEmojis() {
+    $('#emojis').append(require('emojis-list'));
+}
+
 /**
  * #8 This #constructor function creates a new chat #message.
  * @param text `String` a message text
@@ -105,9 +123,12 @@ function sendMessage() {
     // #8 Create a new message to send and log it.
     //var message = new Message("Hello chatter");
 
+    if ($('#message').val()==""){
+        return;
+    }
+
     // #8 let's now use the real message #input
     var message = new Message($('#message').val());
-    console.log("New message:", message);
 
     // #8 convenient message append with jQuery:
     $('#messages').append(createMessageElement(message));
@@ -118,6 +139,10 @@ function sendMessage() {
 
     // #8 clear the message input
     $('#message').val('');
+
+
+    currentChannel.messages.push(message);
+    currentChannel.messageCount++;
 }
 
 /**
@@ -140,41 +165,42 @@ function createMessageElement(messageObject) {
         messageObject.createdOn.toLocaleString() +
         '<em>' + expiresIn+ ' min. left</em></h3>' +
         '<p>' + messageObject.text + '</p>' +
-        '<button>+5 min.</button>' +
+        '<button class="accent-button">+5 min.</button>' +
         '</div>';
 }
 
 
-function listChannels() {
+function listChannels(criterion) {
     // #8 channel onload
     //$('#channels ul').append("<li>New Channel</li>")
 
-    var numberOfChannels = 5;
+    if (criterion==1){
+        channels.sort(compareDate);
+    }else if (criterion==2){
+        channels.sort(compareMessages);
+    }else if (criterion==3){
+        channels.sort(compareMessages);
+        channels.sort(compareStar);
+    }
+    
+    $('#channels ul').empty();
+
+    var i=0;
+    while (i<channels.length){
+        $('#channels ul').append(createChannelElement(channels[i]));
+        i++;
+    }
 
     // #8 five new channels
-    $('#channels ul').append(createChannelElement(yummy));
+    /*$('#channels ul').append(createChannelElement(yummy));
     $('#channels ul').append(createChannelElement(sevencontinents));
     $('#channels ul').append(createChannelElement(killerapp));
     $('#channels ul').append(createChannelElement(firstpersononmars));
-    $('#channels ul').append(createChannelElement(octoberfest));
+    $('#channels ul').append(createChannelElement(octoberfest));*/
 
 
-    /* Selecting one random channel when loading */
-    var r = Math.floor((Math.random() * numberOfChannels) + 1);
-
-    if (r==1){
-        switchChannel(yummy);
-    }else if (r==2){
-        switchChannel(sevencontinents);
-    }else if (r==3){
-        switchChannel(killerapp);
-    }else if (r==4){
-        switchChannel(firstpersononmars);
-    }else if (r==5){
-        switchChannel(octoberfest);
-    }
-
-    
+    /* Selecting one channel when loading */
+    switchChannel(channels[0]);    
 }
 
 /**
@@ -194,7 +220,8 @@ function createChannelElement(channelObject) {
      */
 
     /* Fixing faulty code */
-    var channelName = channelObject.name.slice(1,channelObject.name.length).toLowerCase();
+    var channelName = channelObject.name.slice(1,channelObject.name.length);
+    channelName = channelName.charAt(0).toLowerCase()+ channelName.slice(1,channelName.length);
     var channel = $('<li onclick="switchChannel('+channelName+')">').text(channelObject.name);
 
     // create a channel
@@ -216,4 +243,101 @@ function createChannelElement(channelObject) {
 
     // return the complete channel
     return channel;
+}
+
+function compareDate(ch1, ch2) {
+    var d1 = ch1.createdOn;
+    var d2 = ch2.createdOn;
+
+    if (d1 > d2) {
+        return -1;
+    } else {
+        return 1;
+    }
+}
+
+function compareMessages(ch1,ch2){
+    var m1 = ch1.messageCount;
+    var m2 = ch2.messageCount;
+
+    if (m1 > m2) {
+        return -1;
+    } else {
+        return 1;
+    }
+}
+
+function compareStar(ch1,ch2){
+    var s1 = (ch1.starred) ? 1 : 0;
+    var s2 = (ch2.starred) ? 1 : 0;
+
+    if (s1 > s2) {
+        return -1;
+    } else {
+        return 1;
+    }
+}
+
+
+function newChannel(){
+    $('#messages').empty();
+
+    $('#chat h1').empty();
+
+    $('<input>').attr('type', 'text').attr('placeholder','Enter a #ChannelName').attr('maxlength','140').attr('id','newChannel').appendTo($('#chat h1'));
+    $('<button>').attr('id','abort-button').attr('onclick','abortNewChannel()').addClass('primary-button strong').html('<i class="fas fa-times"></i> ABORT').appendTo($('#chat h1'));
+
+    $('#send-button').empty().removeAttr('onclick').attr('onclick','createNewChannel()').html('CREATE');
+}
+
+function createNewChannel(){
+
+    var channelNewName = $('#newChannel').val();
+    var message = $('#message').val();
+
+    if (channelNewName==""){
+        return;
+    }else if (channelNewName.charAt(0)!="#"){
+        return;
+    }else if (!noSpaces(channelNewName)){
+        return;
+    }
+
+    if (message==""){
+        return;
+    }
+
+    console.log('89898');
+    var nc = new Channel(channelNewName,new Date(),currentLocation.what3words,false,15,0);
+    channels.push(nc);
+
+    currentChannel = nc;
+    sendMessage();
+
+    console.log(currentChannel);
+
+    $('#newChannel').val('');
+
+    abortNewChannel();
+
+    listChannels(1);
+}
+
+function abortNewChannel(){
+
+    $('#chat h1').empty();
+    switchChannel(currentChannel);
+    $('#send-button').empty().removeAttr('onclick').attr('onclick','sendMessage()').html('<i class="fas fa-arrow-right"></i>');
+}
+
+function noSpaces(thingy){
+    var l=thingy.length;
+    var i=0;
+    while (i<l){
+        if (thingy.charAt(i)==' '){
+            return false;
+        }
+        i++;
+    }
+    return true;
 }
